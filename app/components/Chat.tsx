@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { useChat } from "../hooks/useChat";
+import { WeatherCard } from "./WeatherCard";
 
 export function Chat() {
   const { messages, thinking, send } = useChat();
@@ -48,6 +49,7 @@ export function Chat() {
                 </div>
               ) : (
                 <div className="max-w-[85%] text-sm text-gray-900 leading-relaxed">
+                  {msg.weather && <WeatherCard data={msg.weather} />}
                   <ReactMarkdown
                     components={{
                       p: ({ children }) => <p className="mb-3 last:mb-0">{children}</p>,

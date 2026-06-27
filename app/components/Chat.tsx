@@ -1,9 +1,30 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import { useChat } from "../hooks/useChat";
 
 export function Chat() {
-  const { messages, input, setInput, thinking, send, handleKeyDown, bottomRef } = useChat();
+  const { messages, thinking, send } = useChat();
+  const [input, setInput] = useState("");
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, thinking]);
+
+  async function handleSubmit() {
+    const text = input.trim();
+    if (!text) return;
+    setInput("");
+    await send(text);
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  }
 
   return (
     <div className="flex flex-col flex-1 bg-surface">
@@ -71,7 +92,7 @@ export function Chat() {
               className="flex-1 field-sizing-content max-h-44 overflow-y-auto resize-none bg-transparent border-0 border-b border-chrome focus:border-accent focus:outline-none py-2 text-sm text-ink placeholder:text-muted transition-colors leading-relaxed"
             />
             <button
-              onClick={send}
+              onClick={handleSubmit}
               disabled={!input.trim() || thinking}
               className="shrink-0 pb-2 text-accent hover:opacity-70 disabled:opacity-25 disabled:cursor-not-allowed transition-opacity"
               aria-label="Send message"

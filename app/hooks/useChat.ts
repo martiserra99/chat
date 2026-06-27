@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState } from "react";
 
 export interface Message {
   id: string;
@@ -10,23 +10,15 @@ export interface Message {
 
 export function useChat() {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
   const [thinking, setThinking] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, thinking]);
-
-  const send = useCallback(async () => {
-    const text = input.trim();
+  async function send(text: string) {
     if (!text || thinking) return;
 
     setMessages((prev) => [
       ...prev,
       { id: crypto.randomUUID(), role: "user", content: text },
     ]);
-    setInput("");
     setThinking(true);
 
     const res = await fetch("/api/chat", {
@@ -53,14 +45,7 @@ export function useChat() {
         prev.map((m) => (m.id === aiId ? { ...m, content: m.content + chunk } : m))
       );
     }
-  }, [input, thinking]);
-
-  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      send();
-    }
   }
 
-  return { messages, input, setInput, thinking, send, handleKeyDown, bottomRef };
+  return { messages, thinking, send };
 }

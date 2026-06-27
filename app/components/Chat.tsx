@@ -27,9 +27,9 @@ export function Chat() {
   }
 
   return (
-    <div className="flex flex-col flex-1 bg-surface">
-      <header className="flex items-center px-6 h-12 border-b border-chrome shrink-0 bg-surface">
-        <span className="text-sm font-light text-muted tracking-widest">
+    <div className="flex flex-col flex-1 bg-stone-50">
+      <header className="flex items-center px-6 h-12 border-b border-gray-200 shrink-0 bg-stone-50">
+        <span className="text-sm font-light text-gray-400 tracking-widest">
           assistant
         </span>
       </header>
@@ -53,12 +53,12 @@ export function Chat() {
               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
             >
               {msg.role === "user" ? (
-                <div className="max-w-[70%] bg-ink text-white text-sm px-4 py-2 rounded-2xl leading-8 whitespace-pre-wrap">
+                <div className="max-w-[70%] bg-gray-900 text-white text-sm px-4 py-2 rounded-2xl leading-8 whitespace-pre-wrap">
                   {msg.content}
                 </div>
               ) : (
-                <div className="border-l-2 border-chrome pl-4 max-w-full">
-                  <p className="text-sm text-[#3D3D3D] leading-8 whitespace-pre-wrap">
+                <div className="border-l-2 border-gray-200 pl-4 max-w-full">
+                  <p className="text-sm text-gray-700 leading-8 whitespace-pre-wrap">
                     {msg.content}
                   </p>
                 </div>
@@ -67,11 +67,11 @@ export function Chat() {
           ))}
 
           {thinking && (
-            <div className="border-l-2 border-chrome pl-4">
+            <div className="border-l-2 border-gray-200 pl-4">
               <div className="flex items-center gap-1.5 h-8">
-                <span className="w-1.5 h-1.5 rounded-full bg-muted animate-bounce [animation-delay:0ms]" />
-                <span className="w-1.5 h-1.5 rounded-full bg-muted animate-bounce [animation-delay:150ms]" />
-                <span className="w-1.5 h-1.5 rounded-full bg-muted animate-bounce [animation-delay:300ms]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce [animation-delay:0ms]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce [animation-delay:150ms]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce [animation-delay:300ms]" />
               </div>
             </div>
           )}
@@ -80,7 +80,7 @@ export function Chat() {
         </div>
       </div>
 
-      <div className="border-t border-chrome shrink-0 bg-surface">
+      <div className="border-t border-gray-200 shrink-0 bg-stone-50">
         <div className="max-w-2xl mx-auto px-6 py-5">
           <div className="flex items-end gap-3">
             <textarea
@@ -89,12 +89,12 @@ export function Chat() {
               onKeyDown={handleKeyDown}
               placeholder="Write here..."
               rows={1}
-              className="flex-1 field-sizing-content max-h-44 overflow-y-auto resize-none bg-transparent border-0 border-b border-chrome focus:border-accent focus:outline-none py-2 text-sm text-ink placeholder:text-muted transition-colors leading-relaxed"
+              className="flex-1 field-sizing-content max-h-44 overflow-y-auto resize-none bg-transparent border-0 border-b border-gray-200 focus:border-gray-600 focus:outline-none py-2 text-sm text-gray-900 placeholder:text-gray-400 transition-colors leading-relaxed"
             />
             <button
               onClick={handleSubmit}
               disabled={!input.trim() || thinking}
-              className="shrink-0 pb-2 text-accent hover:opacity-70 disabled:opacity-25 disabled:cursor-not-allowed transition-opacity"
+              className="shrink-0 pb-2 text-gray-600 hover:opacity-70 disabled:opacity-25 disabled:cursor-not-allowed transition-opacity"
               aria-label="Send message"
             >
               <svg
@@ -114,7 +114,7 @@ export function Chat() {
               </svg>
             </button>
           </div>
-          <p className="text-[11px] text-muted mt-3">
+          <p className="text-[11px] text-gray-400 mt-3">
             Enter to send · Shift+Enter for new line
           </p>
         </div>

@@ -11,6 +11,7 @@ export interface Message {
 export function useChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [thinking, setThinking] = useState(false);
+  const [previousResponseId, setPreviousResponseId] = useState<string | null>(null);
 
   async function send(text: string) {
     if (!text || thinking) return;
@@ -24,8 +25,11 @@ export function useChat() {
     const res = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: text }),
+      body: JSON.stringify({ message: text, previousResponseId }),
     });
+
+    const newResponseId = res.headers.get("X-Response-Id");
+    if (newResponseId) setPreviousResponseId(newResponseId);
 
     const aiId = crypto.randomUUID();
     setMessages((prev) => [

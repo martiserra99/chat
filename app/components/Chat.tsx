@@ -94,10 +94,7 @@ export function Chat() {
                   {msg.content}
                 </div>
               ) : (
-                <div className="flex items-start gap-2.5 max-w-full">
-                  <span className="text-muted text-sm shrink-0 leading-8">
-                    •
-                  </span>
+                <div className="border-l-2 border-chrome pl-4 max-w-full">
                   <p className="text-sm text-[#3D3D3D] leading-8 whitespace-pre-wrap">
                     {msg.content}
                   </p>
@@ -107,8 +104,7 @@ export function Chat() {
           ))}
 
           {thinking && (
-            <div className="flex items-start gap-2.5">
-              <span className="text-muted text-sm shrink-0 leading-8">•</span>
+            <div className="border-l-2 border-chrome pl-4">
               <div className="flex items-center gap-1.5 h-8">
                 <span className="w-1.5 h-1.5 rounded-full bg-muted animate-bounce [animation-delay:0ms]" />
                 <span className="w-1.5 h-1.5 rounded-full bg-muted animate-bounce [animation-delay:150ms]" />

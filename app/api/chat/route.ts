@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 
 const client = new OpenAI();
+const encoder = new TextEncoder();
 
 async function fileSearch(message: string, previousResponseId: string | null) {
   const apiStream = await client.responses.create({
@@ -12,7 +13,7 @@ async function fileSearch(message: string, previousResponseId: string | null) {
         vector_store_ids: [process.env.OPENAI_VECTOR_STORE_ID!],
       },
     ],
-    previous_response_id: previousResponseId ?? undefined,
+    previous_response_id: previousResponseId,
     stream: true,
   });
 
@@ -28,7 +29,6 @@ export async function POST(request: Request) {
   const { message, previousResponseId } = await request.json();
   const { iterator, responseId } = await fileSearch(message, previousResponseId);
 
-  const encoder = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {
       while (true) {

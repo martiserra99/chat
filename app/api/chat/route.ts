@@ -2,9 +2,7 @@ import OpenAI from "openai";
 
 const client = new OpenAI();
 
-export async function POST(request: Request) {
-  const { message, previousResponseId } = await request.json();
-
+async function fileSearch(message: string, previousResponseId: string | null) {
   const apiStream = await client.responses.create({
     model: "gpt-4o-mini",
     input: message,
@@ -18,12 +16,17 @@ export async function POST(request: Request) {
     stream: true,
   });
 
-  // response.created is always the first event — peek at it to get the ID
-  // before we start streaming, so we can set it as a response header.
   const iterator = apiStream[Symbol.asyncIterator]();
   const first = await iterator.next();
   const responseId =
     first.value?.type === "response.created" ? first.value.response.id : "";
+
+  return { iterator, responseId };
+}
+
+export async function POST(request: Request) {
+  const { message, previousResponseId } = await request.json();
+  const { iterator, responseId } = await fileSearch(message, previousResponseId);
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({

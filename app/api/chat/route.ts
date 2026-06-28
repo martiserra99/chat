@@ -71,7 +71,12 @@ const weatherTool: OpenAI.Responses.Tool = {
 
 const tools: OpenAI.Responses.Tool[] = [
   ...(process.env.OPENAI_VECTOR_STORE_ID
-    ? [{ type: "file_search" as const, vector_store_ids: [process.env.OPENAI_VECTOR_STORE_ID] }]
+    ? [
+        {
+          type: "file_search" as const,
+          vector_store_ids: [process.env.OPENAI_VECTOR_STORE_ID],
+        },
+      ]
     : []),
   weatherTool,
 ];

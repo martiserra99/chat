@@ -36,8 +36,10 @@ const WMO_CONDITIONS: Record<number, string> = {
 };
 
 async function getWeather({ city }: { city: string }) {
+  const cityName = city.split(",")[0].trim();
+
   const { results } = await fetch(
-    `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1`,
+    `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1`,
   ).then((r) => r.json());
 
   const location = results?.[0];
@@ -131,8 +133,17 @@ async function handleWeatherCall(
   previousResponseId: string,
   controller: ReadableStreamDefaultController,
 ): Promise<string> {
-  const weather = await getWeather(JSON.parse(toolCall.arguments));
-  emit(controller, { type: "weather", data: weather });
+  let output: string;
+
+  try {
+    const weather = await getWeather(JSON.parse(toolCall.arguments));
+    emit(controller, { type: "weather", data: weather });
+    output = JSON.stringify(weather);
+  } catch (err) {
+    output = JSON.stringify({
+      error: err instanceof Error ? err.message : "City not found",
+    });
+  }
 
   const followUp = await client.responses.create({
     model: "gpt-4o-mini",
@@ -141,7 +152,7 @@ async function handleWeatherCall(
       {
         type: "function_call_output",
         call_id: toolCall.call_id,
-        output: JSON.stringify(weather),
+        output,
       },
     ],
     tools,

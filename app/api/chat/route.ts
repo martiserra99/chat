@@ -36,10 +36,8 @@ const WMO_CONDITIONS: Record<number, string> = {
 };
 
 async function getWeather({ city }: { city: string }) {
-  const cityName = city.split(",")[0].trim();
-
   const { results } = await fetch(
-    `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1`,
+    `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1`,
   ).then((r) => r.json());
 
   const location = results?.[0];
